@@ -1,6 +1,9 @@
 <template>
     <UContainer>    
-        <LoadingState v-if="isLoadingProjects" />
+        <LoadingState 
+            v-if="isLoadingProjects" 
+            :group-count="3"
+        />
         
         <div v-if="!isLoadingProjects">
             <ProjectCardList 

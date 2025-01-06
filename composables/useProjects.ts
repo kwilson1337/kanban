@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import type { Project } from "~/types/Project"
 
 export const useProjects = () => {
-    const isLoadingProjects = ref(false)
+    const isLoadingProjects = ref(true)
 
     const allProjects = ref<Project[]>([])
     const fetchProjects = async () => {
@@ -32,6 +32,7 @@ export const useProjects = () => {
     return {
         fetchProjects,
         createProject,
-        allProjects
+        allProjects,
+        isLoadingProjects
     }
 }
