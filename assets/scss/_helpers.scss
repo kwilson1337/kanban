@@ -1,0 +1,8 @@
+.grad-border {
+    background:  $grad-border;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    border-color: transparent;
+    border-radius: 12px;
+    border-width: 1px;
+}
