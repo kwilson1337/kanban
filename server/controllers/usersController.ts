@@ -1,5 +1,5 @@
 import { H3Event } from 'h3';
-import { fetchUserById } from '@/server/models/users'
+import { fetchUserById } from '~/server/models/usersModel'
 
 export const fetchUserFromId = async (event: H3Event) => {
     try {

@@ -10,9 +10,9 @@ export const fetchAllPerUser = async (id: number) => {
     return result as Project[];
 }
 
-export const fetchById = async (id: number) => {
+export const fetchById = async (id: number) => {    
     const result = await sql({
-        query: `SELECT * FROM projects WHERE userId = ?`,
+        query: `SELECT * FROM projects WHERE id=?`,
         values: [ id ]
     })
 

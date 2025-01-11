@@ -6,7 +6,7 @@
                 <UBadge :label="formatDate(props.project.createdDate)" />
             </div>
             <div class="project-card__button mt-3">
-                <UButton label="View Project" class="w-full justify-center" />
+                <UButton @click="routeToProject(props.project.id)" label="View Project" class="w-full justify-center" />
             </div>
         </div>
     </div>
@@ -14,13 +14,18 @@
 
 <script setup lang="ts">
 import type { Project } from '@/types/Project'
+import { useRouter } from 'vue-router';
+import { formatDate } from '@/utils/formate-date'
 
 interface ProjectInterface {
     project: Project
 }
 const props = defineProps<ProjectInterface>()
 
-const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString()
+const router = useRouter()
+const routeToProject = (id: number) => {
+    router.push({
+        path: `/project/${id}`
+    })
 }
 </script>

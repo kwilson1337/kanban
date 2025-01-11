@@ -1,30 +1,42 @@
 <template>
-  <Navigation @createProject:navigation="toggleModal" />
-  <ProjectDashboard 
-    :key="projectDashKey"
-  />
+  <NuxtLayout>
+    <Navigation @createProject:navigation="toggleModal" />
+    <NuxtPage></NuxtPage>
 
-  <UModal v-model="showModal">
-    <div class="p-4">
-      <NewProjectForm @newProject:newProjectForm="updateProjects" />      
-    </div>
-  </UModal>
+    <UModal v-model="showModal">
+      <div class="p-4">
+        <NewProjectForm @newProject:newProjectForm="updateProjects" />      
+      </div>
+    </UModal>
+  </NuxtLayout>
 </template>
 
-<script setup lang="ts">
-import ProjectDashboard from '@/components/projects/ProjectDashboard.vue'
+<script lang="ts" setup>
 import Navigation from './components/navigation/Navigation.vue';
-import NewProjectForm from './components/forms/NewProjectForm.vue';
+import NewProjectForm from '@/components/forms/NewProjectForm.vue';
+import { useUserStore } from '@/stores/user'
+import { userId } from '@/constants/user'
+import { useProjects } from '@/composables/useProjects'
+import { useProjectStore } from '@/stores/project';
 
+const userStore = useUserStore()
+const projectStore = useProjectStore()
+
+onBeforeMount(async () => {
+  await userStore.fetchUserById(userId)
+})
 
 const showModal = ref(false)
 const toggleModal = () => {
   showModal.value = !showModal.value
 }
 
-const projectDashKey = ref(1)
-const updateProjects = async () => {
-  projectDashKey.value ++  
+const { fetchProjects, allProjects } = useProjects()
+const updateProjects = async () => {   
+
+  await fetchProjects() 
+  projectStore.setProjectList(allProjects.value)
+
   toggleModal()
 }
 </script>

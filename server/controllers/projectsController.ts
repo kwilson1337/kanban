@@ -1,4 +1,8 @@
-import { post, fetchAllPerUser } from '~/server/models/projects'
+import { 
+    post, 
+    fetchAllPerUser, 
+    fetchById 
+} from '~/server/models/projectsModel'
 import { H3Event } from 'h3';
 
 export const createProject = async (event: H3Event) => {
@@ -26,6 +30,22 @@ export const fetchUserProjects = async (event: H3Event) => {
             data: result
         }
 
+    } catch(error) {
+        throw createError({            
+            statusCode: 500,
+            statusMessage: 'Something went wrong'
+        })
+    }
+}
+
+export const fetchProjectById = async (event: H3Event) => {
+    try {
+        const id = Number(getRouterParam(event, 'id'))                
+        const result = await fetchById(id)        
+
+        return {
+            data: result
+        }
     } catch(error) {
         throw createError({            
             statusCode: 500,

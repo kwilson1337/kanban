@@ -5,7 +5,7 @@ import type { Project } from "~/types/Project"
 export const useProjects = () => {
     const isLoadingProjects = ref(true)
 
-    const allProjects = ref<Project[]>([])
+    const allProjects = ref<Project[] | []>([])
     const fetchProjects = async () => {
         isLoadingProjects.value = true
         
@@ -29,10 +29,18 @@ export const useProjects = () => {
         }
     }
 
+    const singleProject = ref<Project | null>(null)
+    const fetchProjectById = async (id: number) => {                    
+        const result = await $fetch(`/api/projects/${id}`)                
+        singleProject.value = result?.data[0]
+    }
+
     return {
         fetchProjects,
         createProject,
         allProjects,
-        isLoadingProjects
+        isLoadingProjects,
+        fetchProjectById,
+        singleProject
     }
 }

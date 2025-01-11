@@ -8,6 +8,7 @@
                 <div v-if="currentUser" class="navigation__left">
                     Welcome, {{ currentUser.firstName }} {{ currentUser.lastName }}
                 </div>
+                
                 <div class="navigation__right">
                     <UButton @click="emits('createProject:navigation')">New Project</UButton>
                 </div>
@@ -17,15 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { useUsers } from '@/composables/useUsers'
-import { userId } from '@/constants/user'
+import { useUserStore } from '@/stores/user'
 
 const emits = defineEmits<{
     (e:'createProject:navigation'): void
 }>()
 
-const { fetchUserById, currentUser } = useUsers()
-onMounted(async () => {
-    await fetchUserById(userId)    
-})
+const userStore = useUserStore()
+const currentUser = computed(() => userStore.currentUser)
 </script>
