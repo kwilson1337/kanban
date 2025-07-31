@@ -27,3 +27,9 @@ const emits = defineEmits<{
 const userStore = useUserStore()
 const currentUser = computed(() => userStore.currentUser)
 </script>
+
+<style lang="scss" scoped>
+.navigation {
+    border-bottom: 1px solid #4ade80;    
+}
+</style>

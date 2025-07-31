@@ -3,7 +3,7 @@ import type { Users } from '~/types/Users'
 
 export const useUserStore = defineStore('userStore', () => {
 
-    const currentUser = ref<Users | null>(null)
+    const currentUser = ref<Users>()
     const setUser = (user: Users) => {
         currentUser.value = user
     }

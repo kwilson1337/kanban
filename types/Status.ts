@@ -1,6 +1,6 @@
 export type Status = {
-    id: number;
+    id: number | string;
     statusName: string;
     createdDate: string;
-    projectId: number;
+    projectId: number | string;
 }

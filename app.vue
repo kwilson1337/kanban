@@ -1,7 +1,10 @@
 <template>
   <NuxtLayout>
     <Navigation @createProject:navigation="toggleModal" />
-    <NuxtPage></NuxtPage>
+
+    <div class="app-page-wrapper mt-10">
+      <NuxtPage></NuxtPage>
+    </div>
 
     <UModal v-model="showModal">
       <div class="p-4">

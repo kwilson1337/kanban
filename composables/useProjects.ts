@@ -28,11 +28,10 @@ export const useProjects = () => {
             await fetchProjects()
         }
     }
-
-    const singleProject = ref<Project | null>(null)
+    
     const fetchProjectById = async (id: number) => {                    
         const result = await $fetch(`/api/projects/${id}`)                
-        singleProject.value = result?.data[0]
+        return result.data
     }
 
     return {
@@ -40,7 +39,6 @@ export const useProjects = () => {
         createProject,
         allProjects,
         isLoadingProjects,
-        fetchProjectById,
-        singleProject
+        fetchProjectById        
     }
 }

@@ -41,7 +41,7 @@ export const fetchUserProjects = async (event: H3Event) => {
 export const fetchProjectById = async (event: H3Event) => {
     try {
         const id = Number(getRouterParam(event, 'id'))                
-        const result = await fetchById(id)        
+        const result = await fetchById(id)                
 
         return {
             data: result
