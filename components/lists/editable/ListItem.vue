@@ -4,7 +4,7 @@
             v-model="localStatusList.statusName" 
             placeholder="Status name"
             size="xl"                                 
-        >        
+        >                        
             <template v-if="localStatusList.statusName.length" #trailing>
                 <UButton 
                     :disabled="false"

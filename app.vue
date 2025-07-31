@@ -12,6 +12,7 @@
       </div>
     </UModal>
   </NuxtLayout>
+  
 </template>
 
 <script lang="ts" setup>

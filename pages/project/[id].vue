@@ -53,4 +53,5 @@ const goBack = () => {
         path: '/'
     })
 }
+
 </script>

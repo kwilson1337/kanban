@@ -7,7 +7,7 @@
                 :project-id="props.projectId"
             />
         </div>
-
+            
         <div class="status-management__actions p-4 mt-4">
             <UButton 
                 class="mr-3" 
