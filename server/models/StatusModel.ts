@@ -30,3 +30,28 @@ export const createBaseStatuses = async (projectId: number) => {
         resultArray.push(result)
     })        
 }
+
+export const updateAndAdddNewProjectStatuses = async (
+    statuses: Status[], 
+    projectId: number | string
+) => {    
+    const filterOutCreateDate = statuses.map(status => ({
+        id: status.id,
+        statusName: status.statusName,
+        ordinal: status.ordinal,
+        projectId: status.projectId
+    }))
+
+    const insertValues = filterOutCreateDate.map(status => {
+        return `('${status.statusName}', ${status.ordinal}, ${status.projectId})`
+    })
+                     
+    const result = await sql({        
+        query: `INSERT INTO status (statusName, ordinal, projectId)
+                VALUES ${insertValues.join(', ')}                                    
+                ON DUPLICATE KEY UPDATE
+                    statusName = VALUES(statusName)`
+    })
+
+    console.log('result', result)    
+}

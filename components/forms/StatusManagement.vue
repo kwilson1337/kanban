@@ -5,6 +5,7 @@
                 class="p-6"
                 :list="props.projectStatuses" 
                 :project-id="props.projectId"
+                @editableList:update="bundleUpdatedListItems"
             />
         </div>
             
@@ -16,7 +17,7 @@
             >
                 Cancel
             </UButton>
-            <UButton>Submit</UButton>
+            <UButton @click="submitUpdatedStatusList">Submit</UButton>
         </div>
     </div>
 </template>
@@ -24,6 +25,7 @@
 <script lang="ts" setup>
 import type { Status } from '@/types/Status'
 import EditableList from '~/components/lists/editable/EditableList.vue'
+import { useProjects } from '@/composables/useProjects';
 
 interface Props {
     projectStatuses: Status[],
@@ -31,6 +33,19 @@ interface Props {
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['statusManagement:closeModal'])
+
+const statusListItemSubmitData = ref<Status[]>()
+const bundleUpdatedListItems = (data: Status[]) => {
+    statusListItemSubmitData.value = data    
+}
+
+const { updateProjectStatus } = useProjects()
+const submitUpdatedStatusList = async () => {    
+    if(statusListItemSubmitData) {
+        const filteredResults = statusListItemSubmitData.value?.filter(item => item.statusName)        
+        await updateProjectStatus(filteredResults || [], props.projectId)
+    }    
+}
 </script>
 
 <style lang="scss" scoped>

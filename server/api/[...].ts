@@ -1,6 +1,7 @@
 import { useBase, createRouter, defineEventHandler } from 'h3'
 import * as projectController from '~/server/controllers/projectsController'
 import * as userController from '~/server/controllers/usersController'
+import * as projectStatusController from '~/server/controllers/statusController'
 
 const router = createRouter();
 
@@ -15,5 +16,10 @@ router.get('/projects/user/:id', defineEventHandler(projectController.fetchUserP
 Users
 */
 router.get('/users/:id', defineEventHandler(userController.fetchUserFromId))
+
+/**
+Project Status
+*/
+router.post('/projects/:id/status/update', defineEventHandler(projectStatusController.updateProjectStatuses))
 
 export default useBase('/api', router.handler)

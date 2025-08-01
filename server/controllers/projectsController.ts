@@ -11,7 +11,8 @@ export const createProject = async (event: H3Event) => {
         const result = await post(body)         
            
         return {
-          data: result
+          data: result,
+          statusCode: 200,
         };
     } catch(error) {
         throw createError({            
@@ -27,7 +28,8 @@ export const fetchUserProjects = async (event: H3Event) => {
         const result = await fetchAllPerUser(id)
         
         return {
-            data: result
+            data: result,
+            statusCode: 200,
         }
 
     } catch(error) {
@@ -44,7 +46,8 @@ export const fetchProjectById = async (event: H3Event) => {
         const result = await fetchById(id)                
 
         return {
-            data: result
+            data: result,
+            statusCode: 200,
         }
     } catch(error) {
         throw createError({            

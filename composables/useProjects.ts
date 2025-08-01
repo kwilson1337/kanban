@@ -1,6 +1,7 @@
 import { userId } from "~/constants/user"
 import { ref } from 'vue'
 import type { Project } from "~/types/Project"
+import type { Status } from "~/types/Status"
 
 export const useProjects = () => {
     const isLoadingProjects = ref(true)
@@ -34,11 +35,25 @@ export const useProjects = () => {
         return result.data
     }
 
+    const updateProjectStatus = async (
+        statuses: Status[], 
+        projectId: number | string
+    ) => {
+        const result = await $fetch(`/api/projects/${projectId}/status/update`, {
+            method: 'POST',
+            body: {
+                statuses                
+            }
+        })  
+        console.log('result', result)
+    }
+
     return {
         fetchProjects,
         createProject,
         allProjects,
         isLoadingProjects,
-        fetchProjectById        
+        fetchProjectById,
+        updateProjectStatus      
     }
 }

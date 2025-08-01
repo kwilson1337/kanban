@@ -1,12 +1,13 @@
 <template>
     <div class="editable-list">
         <div class="editable-list__inner">
-            <ul class="editable-list__list">                
+            <ul class="editable-list__list">                                
                 <ListItem 
-                    v-for="(status, index) in filterListItems"
+                    v-for="(status, index) in localStatusList"
                     :status="status"
                     :class="{'mt-2' : index > 0}"
-                    @listItem:removeItem="handleRemoveListItem"                    
+                    @listItem:removeItem="handleRemoveListItem" 
+                    @listItem:update="handleUpdateListItem"                   
                 />
             </ul>            
         </div>
@@ -27,29 +28,39 @@ interface Props {
     projectId: number | string
 }
 const props = defineProps<Props>()
+const emits = defineEmits(['editableList:update'])
 
 const localStatusList = ref([...props.list])
 const addStatus = () => {
-    localStatusList.value.push({
+    const statusObj = {
         id: nanoid(),
         statusName: '',
-        createdDate: '',
+        ordinal: localStatusList.value.length + 1,        
         projectId: props.projectId
-    })
-}
-
-const idsToRemove = ref(new Set())
-const handleRemoveListItem = (id: number | string) => {            
-    idsToRemove.value.add(id)
-}
-
-const filterListItems = computed(() => {
-    const unwantedIds = [...idsToRemove.value]        
+    } as Status
     
-    if(unwantedIds.length === 0) {
-        return localStatusList.value
-    }
-                
-    return localStatusList.value.filter(listItem => !unwantedIds.includes(listItem.id))
-})
+    localStatusList.value.push(statusObj)
+}
+
+const handleRemoveListItem = (id: number | string) => {                
+    const findIndex = localStatusList.value.findIndex(obj => obj.id === id)
+    localStatusList.value.splice(findIndex, 1)
+}
+
+/**
+ * Find and update list item
+ that is being edited. 
+ 
+ Once updated, emit full list
+ to parent for submit
+ */
+const handleUpdateListItem = (data: Status) => {
+    const foundListItem = localStatusList.value.find(listItem => listItem.id === data.id)
+    
+    if(foundListItem) {
+        foundListItem.statusName = data.statusName
+    }    
+
+    emits('editableList:update', localStatusList.value)
+}
 </script>
