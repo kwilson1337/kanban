@@ -11,7 +11,7 @@
                         <UBadge :label="formatDate(singleProject.createdDate)" />
                     </p>     
                     
-                    <UButton @click="showStatusModal = true">Set Project Statuses</UButton>
+                    <UButton @click="showStatusModal = true">Update Project Statuses</UButton>
                 </div>
 
                 <div class="single-project__board mt-6"> 

@@ -1,9 +1,9 @@
 <template>
     <div class="editable-list">
         <div class="editable-list__inner">
-            <ul class="editable-list__list">
+            <ul class="editable-list__list">                
                 <ListItem 
-                    v-for="(status, index) in localStatusList"
+                    v-for="(status, index) in filterListItems"
                     :status="status"
                     :class="{'mt-2' : index > 0}"
                     @listItem:removeItem="handleRemoveListItem"                    
@@ -38,11 +38,18 @@ const addStatus = () => {
     })
 }
 
-const idsToRemove = ref([])
-const handleRemoveListItem = (id: number | string) => {    
-    console.log(id)
-    idsToRemove.value.push(id)
-
-    console.log('idsToRemove', idsToRemove.value)
+const idsToRemove = ref(new Set())
+const handleRemoveListItem = (id: number | string) => {            
+    idsToRemove.value.add(id)
 }
+
+const filterListItems = computed(() => {
+    const unwantedIds = [...idsToRemove.value]        
+    
+    if(unwantedIds.length === 0) {
+        return localStatusList.value
+    }
+                
+    return localStatusList.value.filter(listItem => !unwantedIds.includes(listItem.id))
+})
 </script>

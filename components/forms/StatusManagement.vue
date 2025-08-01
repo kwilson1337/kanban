@@ -3,7 +3,7 @@
         <div class="status-management__inner">
             <EditableList 
                 class="p-6"
-                :list="localStatusList" 
+                :list="props.projectStatuses" 
                 :project-id="props.projectId"
             />
         </div>
@@ -31,8 +31,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['statusManagement:closeModal'])
-
-const localStatusList = ref([...props.projectStatuses])
 </script>
 
 <style lang="scss" scoped>

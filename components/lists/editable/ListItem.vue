@@ -3,7 +3,8 @@
         <UInput 
             v-model="localStatusList.statusName" 
             placeholder="Status name"
-            size="xl"                                 
+            size="xl"        
+            :ui="{ icon: { trailing: { pointer: 'pointer-events-auto' } } }"                                 
         >                        
             <template v-if="localStatusList.statusName.length" #trailing>
                 <UButton 
@@ -11,9 +12,8 @@
                     color="yellow"
                     @click="emits('listItem:removeItem', localStatusList.id)"
                     aria-label="clear status name"
-                >
-                    X
-                </UButton>
+                    icon="i-heroicons-x-mark"
+                />
             </template>
         </UInput>
     </li>
