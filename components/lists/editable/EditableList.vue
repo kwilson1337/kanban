@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import type { Status } from '~/types/Status';
 import ListItem from './ListItem.vue';
-import { nanoid } from 'nanoid';
+import { nanoIdNumbers } from '~/utils/number-ids'
 
 interface Props {
     list: [] | Status[],
@@ -33,7 +33,7 @@ const emits = defineEmits(['editableList:update'])
 const localStatusList = ref([...props.list])
 const addStatus = () => {
     const statusObj = {
-        id: nanoid(),
+        id: nanoIdNumbers(),
         statusName: '',
         ordinal: localStatusList.value.length + 1,        
         projectId: props.projectId

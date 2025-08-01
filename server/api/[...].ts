@@ -21,5 +21,6 @@ router.get('/users/:id', defineEventHandler(userController.fetchUserFromId))
 Project Status
 */
 router.post('/projects/:id/status/update', defineEventHandler(projectStatusController.updateProjectStatuses))
+router.get('/projects/:id/status', defineEventHandler(projectStatusController.fetchStatusForProject))
 
 export default useBase('/api', router.handler)

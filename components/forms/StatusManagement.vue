@@ -32,7 +32,7 @@ interface Props {
     projectId: number | string
 }
 const props = defineProps<Props>()
-const emits = defineEmits(['statusManagement:closeModal'])
+const emits = defineEmits(['statusManagement:closeModal', 'statusManagement:submit'])
 
 const statusListItemSubmitData = ref<Status[]>()
 const bundleUpdatedListItems = (data: Status[]) => {
@@ -43,7 +43,9 @@ const { updateProjectStatus } = useProjects()
 const submitUpdatedStatusList = async () => {    
     if(statusListItemSubmitData) {
         const filteredResults = statusListItemSubmitData.value?.filter(item => item.statusName)        
+
         await updateProjectStatus(filteredResults || [], props.projectId)
+        emits('statusManagement:submit')
     }    
 }
 </script>

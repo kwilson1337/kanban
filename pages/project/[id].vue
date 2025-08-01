@@ -26,6 +26,7 @@
             :projectStatuses="singleProject.status" 
             :project-id="singleProject.id"
             @statusManagement:closeModal="showStatusModal = false"
+            @statusManagement:submit="closeAndFetchStatuses"
         />   
     </UModal>
 </template>
@@ -39,7 +40,7 @@ import type { Project } from '~/types/Project';
 
 const router  = useRouter()
 const route = useRoute()
-const { fetchProjectById } = useProjects()
+const { fetchProjectById, fetchProjectStatuses } = useProjects()
 
 const singleProject = ref<Project>()
 onMounted(async () => {        
@@ -54,4 +55,12 @@ const goBack = () => {
     })
 }
 
+const closeAndFetchStatuses = async () => {
+    if(singleProject.value) {
+        const fetchedStatuses = await fetchProjectStatuses(singleProject.value.id)   
+        
+        singleProject.value.status = fetchedStatuses.data         
+        showStatusModal.value = false
+    }    
+}
 </script>

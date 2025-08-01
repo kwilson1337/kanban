@@ -31,21 +31,30 @@ export const useProjects = () => {
     }
     
     const fetchProjectById = async (id: number) => {                    
-        const result = await $fetch(`/api/projects/${id}`)                
+        const result = await $fetch(`/api/projects/${id}`)
         return result.data
+    }
+
+    const fetchProjectStatuses = async (projectId: number) => {
+        const result = await $fetch(`/api/projects/${projectId}/status`)
+        
+        if(result) {
+            return result
+        }
+
+        return []
     }
 
     const updateProjectStatus = async (
         statuses: Status[], 
         projectId: number | string
     ) => {
-        const result = await $fetch(`/api/projects/${projectId}/status/update`, {
+        await $fetch(`/api/projects/${projectId}/status/update`, {
             method: 'POST',
             body: {
                 statuses                
             }
-        })  
-        console.log('result', result)
+        })
     }
 
     return {
@@ -54,6 +63,7 @@ export const useProjects = () => {
         allProjects,
         isLoadingProjects,
         fetchProjectById,
-        updateProjectStatus      
+        updateProjectStatus,
+        fetchProjectStatuses
     }
 }

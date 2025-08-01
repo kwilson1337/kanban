@@ -2,7 +2,7 @@ import { sql } from '~~/server/db';
 import type { Project } from '~/types/Project';
 import type { Status } from '~/types/Status';
 import { ResultSetHeader } from '@/types/ResultSetHeader'
-import { createBaseStatuses } from '@/server/models/StatusModel'
+import { createBaseStatuses, fetchStatusByProjectId } from '~/server/models/statusModel'
 
 export const fetchAllPerUser = async (id: number) => {
     const result = await sql({
@@ -19,10 +19,7 @@ export const fetchById = async (id: number) => {
     }) as Project[]
 
     const projectId = projectResult[0].id    
-    const statusResults = await sql({
-        query: 'SELECT * from status WHERE projectId = ?',
-        values: [ projectId ]
-    }) as Status[]  
+    const statusResults = await fetchStatusByProjectId(projectId) as Status[]
 
     const returnObj = {
         ...projectResult[0],
