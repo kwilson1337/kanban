@@ -1,14 +1,14 @@
 <template>
     <div v-if="props.task" class="task-container">
         <div class="task-container__inner">
-            <div class="task-container__header flex items-center justify-between gap-4">
+            <div class="task-container__header flex items-center justify-between gap-3">
                 <p class="mb-0">                    
                     <EditableInput 
                         ref="taskTitle"
                         v-model="props.task.taskName" 
                         :disabled="!props.task.isEditing" 
                         :variant="props.task.isEditing ? 'outline' : 'none'"      
-                        color="rose"                          
+                        color="rose"                                      
                     />
                 </p>                
                 <p v-if="!props.task.isEditing" class="mb-0">{{ formatDate(props.task.dueDate) }}</p>
@@ -17,8 +17,7 @@
                     <UButton 
                         color="white"
                         variant="outline"
-                        icon="i-heroicons-calendar-days-20-solid"                         
-                        ref="calendarButton"
+                        icon="i-heroicons-calendar-days-20-solid"                                              
                     />
 
                     <template #panel="{ close }">
@@ -27,8 +26,12 @@
                 </UPopover>
             </div>
 
-            <div class="task-container__desc mt-3">
+            <div v-if="props.task.taskDescription" class="task-container__desc mt-3">
                 {{ props.task.taskDescription }}
+            </div>
+
+            <div v-if="props.task.isEditing && canSubmit" class="task-container__submit mt-3">
+                <UButton class="w-full justify-center" color="white" variant="outline">Submit</UButton>
             </div>
         </div>
     </div>    
@@ -40,20 +43,21 @@ import EditableInput from '../inputs/EditableInput.vue'
 import DatePicker from '@/components/date-picker/index.vue'
 
 const props = defineProps({
-    task: Object,
-    default: () => ({})
+    task: {
+        type: Object,
+        default: () => ({})
+    }
 })
 const defaultCalendarValue = ref(new Date())
 
-const taskTitle = ref<HTMLInputElement | null>(null);
-watch(() => props.task, (newVal) => {
-    console.log(newVal)
-    if(newVal && newVal.isEditing) {
-       nextTick(() => {                        
-            taskTitle.value?.$el.querySelector('input')
-        });
+const canSubmit = ref(false)
+watch(() => [props.task.taskName, defaultCalendarValue.value], (newVal, oldVal) => {
+    if(newVal[0] && newVal[1]) {
+        canSubmit.value = true
+    } else {
+        canSubmit.value = false
     }
-}, { deep: true })
+})
 </script>
 
 <style lang="scss" scoped>
