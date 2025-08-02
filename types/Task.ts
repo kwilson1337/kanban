@@ -5,4 +5,6 @@ export type Task = {
     taskName: string;
     taskDescription: string;
     taskOwner: number | string;
+    dueDate: string;
+    createdDate: string;
 }

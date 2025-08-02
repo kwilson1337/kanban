@@ -41,10 +41,15 @@ export const fetchStatusByProjectId = async (projectId : number | string) => {
         }) as Status[]
 
         /**
-         * fetch tasks and bundle into status        
+         * fetch tasks and bundle into 
+         * status array by ID     
          */
         const tasks = await fetchTasks(projectId) as Task[]
-        console.log('tasks', tasks)
+        if(tasks) {
+            fetchStatus.forEach(status => {            
+                status.tasks = tasks.filter(task => task.statusId === status.id)
+            })
+        }        
         
         return fetchStatus
     }

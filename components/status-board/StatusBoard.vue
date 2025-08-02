@@ -9,7 +9,7 @@
                     v-if="props.projectStatuses"
                     v-for="status in props.projectStatuses"
                     :status="status"
-                    :class="{'--expand' : gridCount > 4}"
+                    :class="{'--expand' : gridCount > 4}"                    
                 />
             </div>            
         </div>
