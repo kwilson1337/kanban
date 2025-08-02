@@ -10,3 +10,11 @@ export const fetchTasks = async (projectId: string | number) => {
 
     return tasks
 }
+
+export const insertSingleTask = (projectId: string | number, task: {}) => {
+    const insert = sql({
+        query: `INSERT INTO tasks (taskName, taskDescription, statusId, projectId, taskOwner, dueDate)
+                VALUES (?, ?, ?, ?, ?, ?)`,
+        values: [task]
+    })
+}
