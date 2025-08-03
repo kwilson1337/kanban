@@ -7,11 +7,21 @@
             </div>
             
             <div class="single-status-board__drop-zone mt-6">
-                <TaskComp 
-                    v-for="(task) in props.status.tasks" 
-                    :task="task"
-                    @task:submitQuickTask="addQuickTask"
-                />
+                <Draggable
+                    v-model="props.status.tasks"
+                    itemKey="id"
+                    v-bind="dragOptions"       
+                    delay="120"                                                    
+                >
+                    <template #item="{ element }">
+                        <TaskComp                             
+                            :task="element"           
+                            :currentStatusId="props.status.id"                 
+                            @task:submitQuickTask="addQuickTask"
+                            @task:deleteTask="deleteTaskFromBoard"
+                        />
+                    </template>
+                </Draggable>                
             </div>
         </div>
     </div>
@@ -24,6 +34,8 @@ import { nanoIdNumbers } from '#imports';
 import { useUserStore } from '@/stores/user'
 import type { Task } from '~/types/Task';
 import { useTasks } from '@/composables/useTasks'
+import Draggable from "vuedraggable";
+import type { SortableEvent } from 'sortablejs';
 
 interface Props {
     status: Status    
@@ -46,6 +58,20 @@ const createTask = () => {
     props.status.tasks.unshift(taskObj)
 }
 
+const dragOptions = computed(() => {
+    return {
+        animation: 200,
+        group: "board",
+        disabled: false,
+        ghostClass: "--ghost-elm",                        
+    }
+})
+
+const deleteTaskFromBoard = (data: Task) => {
+    const foundTask = props.status.tasks.findIndex(task => task.id === data.id)    
+    props.status.tasks.splice(foundTask, 1)
+}
+
 const { insertQuickTask } = useTasks()
 const addQuickTask = async (data: Task) => {
     await insertQuickTask(data, data.projectId)
@@ -59,7 +85,8 @@ const addQuickTask = async (data: Task) => {
     padding: 15px 10px;
     border-radius: 8px;        
     flex-shrink: 0;
-    height: 100vh;
+    min-height: 100vh;
+    position: relative;
 
     &.--expand {
         flex-basis: 250px;
@@ -72,8 +99,18 @@ const addQuickTask = async (data: Task) => {
     }
 
     &__drop-zone {
-        display: grid;
-        gap: 15px;
+       position: absolute;
+       left: 0px;
+       width: 100%;
+       height: 100%;
+       padding: 0px 10px;       
+
+       > div {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+            height: 100%;
+       }       
     }
 }
 </style>

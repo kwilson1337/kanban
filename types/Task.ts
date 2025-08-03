@@ -5,6 +5,7 @@ export type Task = {
     taskName: string;
     taskDescription: string;
     taskOwner: number | string;
-    dueDate: string;
+    dueDate: string | Date;
     createdDate: string;
+    isEditing?: boolean | string
 }

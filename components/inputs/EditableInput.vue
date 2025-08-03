@@ -22,7 +22,15 @@ const attrs = useAttrs()
             font-size: 16px;
             opacity: 1;
             cursor: auto;            
-        }  
+        }         
     }    
+
+    &.--pointer {
+        &:deep(input) {
+            &:disabled {
+                cursor: pointer;
+            }
+        }
+    }   
 }
 </style>

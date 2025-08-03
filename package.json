@@ -19,9 +19,11 @@
     "pinia": "^2.3.0",
     "v-calendar": "^3.1.2",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.15.8",
     "sass": "^1.83.1"
   }
 }

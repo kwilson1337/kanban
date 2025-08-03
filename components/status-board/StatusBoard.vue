@@ -27,8 +27,9 @@ const props = defineProps<Props>()
 const gridCount = ref(props.projectStatuses.length)
 
 watch(() => props.projectStatuses, () => {
+    console.log('props.projectStatuses', props.projectStatuses)
     gridCount.value = props.projectStatuses.length
-})
+}, { deep: true })
 </script>
 
 <style lang="scss" scoped>
