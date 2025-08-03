@@ -10,6 +10,7 @@
                 <TaskComp 
                     v-for="(task) in props.status.tasks" 
                     :task="task"
+                    @task:submitQuickTask="addQuickTask"
                 />
             </div>
         </div>
@@ -21,13 +22,14 @@ import type { Status } from '~/types/Status';
 import TaskComp from '../tasks/Task.vue';
 import { nanoIdNumbers } from '#imports';
 import { useUserStore } from '@/stores/user'
+import type { Task } from '~/types/Task';
+import { useTasks } from '@/composables/useTasks'
 
 interface Props {
-    status: Status
+    status: Status    
 }
 const props = defineProps<Props>()
 const { currentUser } = useUserStore()
-
 
 const createTask = () => {
     const taskObj = {
@@ -35,12 +37,18 @@ const createTask = () => {
         statusId: props.status.id,
         projectId: props.status.projectId,
         taskName: '',       
+        taskDescription: '',
         taskOwner: currentUser.id,
         dueDate: '',
         isEditing: true
     }
 
     props.status.tasks.unshift(taskObj)
+}
+
+const { insertQuickTask } = useTasks()
+const addQuickTask = async (data: Task) => {
+    await insertQuickTask(data, data.projectId)
 }
 </script>
 

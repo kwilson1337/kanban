@@ -1,5 +1,5 @@
 <template>
-    <li>        
+    <li>
         <UInput 
             v-model="localStatusList.statusName" 
             placeholder="Status name"
@@ -28,10 +28,6 @@ const props = defineProps<Props>()
 const emits = defineEmits(['listItem:removeItem', 'listItem:update'])
 
 const localStatusList = ref({...props.status})
-watch(() => props.status, () => {
-    localStatusList.value = {...props.status}    
-})
-
 watch(() => localStatusList.value, (newVal) => {
     emits('listItem:update', newVal)
 }, { deep: true })

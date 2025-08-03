@@ -30,7 +30,7 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['editableList:update'])
 
-const localStatusList = ref([...props.list])
+const localStatusList = ref(props.list.map(list => ({...list})))
 const addStatus = () => {
     const statusObj = {
         id: nanoIdNumbers(),
@@ -54,7 +54,7 @@ const handleRemoveListItem = (id: number | string) => {
  Once updated, emit full list
  to parent for submit
  */
-const handleUpdateListItem = (data: Status) => {
+const handleUpdateListItem = (data: Status) => {    
     const foundListItem = localStatusList.value.find(listItem => listItem.id === data.id)
     
     if(foundListItem) {

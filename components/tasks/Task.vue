@@ -1,5 +1,5 @@
 <template>
-    <div v-if="props.task" class="task-container">
+    <div v-if="props.task" class="task-container">        
         <div class="task-container__inner">
             <div class="task-container__header flex items-center justify-between gap-3">
                 <p class="mb-0">                    
@@ -10,9 +10,8 @@
                         :variant="props.task.isEditing ? 'outline' : 'none'"      
                         color="rose"                                      
                     />
-                </p>                
-                <p v-if="!props.task.isEditing" class="mb-0">{{ formatDate(props.task.dueDate) }}</p>
-                
+                </p>                                
+                <p v-if="!props.task.isEditing" class="mb-0">{{ formatDate(props.task.dueDate) }}</p>                            
                 <UPopover v-else :popper="{ placement: 'bottom-start' }">
                     <UButton 
                         color="white"
@@ -31,17 +30,25 @@
             </div>
 
             <div v-if="props.task.isEditing && canSubmit" class="task-container__submit mt-3">
-                <UButton class="w-full justify-center" color="white" variant="outline">Submit</UButton>
+                <UButton 
+                    class="w-full justify-center" 
+                    color="white" 
+                    variant="outline"
+                    @click="submitQuickTask"
+                >
+                    Submit
+                </UButton>
             </div>
         </div>
     </div>    
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/formate-date'
+import { formatDate, formatDateForSubmit } from '@/utils/formate-date'
 import EditableInput from '../inputs/EditableInput.vue'
 import DatePicker from '@/components/date-picker/index.vue'
 
+const emits = defineEmits(['task:submitQuickTask'])
 const props = defineProps({
     task: {
         type: Object,
@@ -51,13 +58,29 @@ const props = defineProps({
 const defaultCalendarValue = ref(new Date())
 
 const canSubmit = ref(false)
-watch(() => [props.task.taskName, defaultCalendarValue.value], (newVal, oldVal) => {
+watch(() => [props.task.taskName, defaultCalendarValue.value], (newVal) => {       
     if(newVal[0] && newVal[1]) {
+        props.task.dueDate = newVal[1]
         canSubmit.value = true
     } else {
         canSubmit.value = false
     }
 })
+
+const submitQuickTask = () => {    
+    const clone = (({ isEditing, id, ...o }) => o)(props.task)     
+    
+    emits('task:submitQuickTask', {
+        taskName: clone.taskName,
+        taskDescription: clone.taskDescription,
+        statusId: clone.statusId,
+        projectId: clone.projectId,
+        taskOwner: clone.taskOwner,
+        dueDate: formatDateForSubmit(clone.dueDate)
+    })
+
+    props.task.isEditing = false
+}
 </script>
 
 <style lang="scss" scoped>

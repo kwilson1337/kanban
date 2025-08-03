@@ -2,6 +2,7 @@ import { useBase, createRouter, defineEventHandler } from 'h3'
 import * as projectController from '~/server/controllers/projectsController'
 import * as userController from '~/server/controllers/usersController'
 import * as projectStatusController from '~/server/controllers/statusController'
+import * as taskControler from '~/server/controllers/taskController'
 
 const router = createRouter();
 
@@ -22,5 +23,10 @@ Project Status
 */
 router.post('/projects/:id/status/update', defineEventHandler(projectStatusController.updateProjectStatuses))
 router.get('/projects/:id/status', defineEventHandler(projectStatusController.fetchStatusForProject))
+
+/**
+Tasks
+*/
+router.post('/projects/:id/task/quick-task', defineEventHandler(taskControler.createQuickTask))
 
 export default useBase('/api', router.handler)
