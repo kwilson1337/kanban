@@ -1,6 +1,6 @@
 <template>
     <div class="single-status-board">        
-        <div class="single-status-board__inner">            
+        <div class="single-status-board__inner">                        
             <div class="single-status-board__header">
                 <p class="mb-0">{{ props.status.statusName }}</p>
                 <UButton icon="i-heroicons-plus" @click="createTask" />
@@ -10,12 +10,14 @@
                 <Draggable
                     v-model="props.status.tasks"
                     itemKey="id"
-                    v-bind="dragOptions"       
-                    delay="120"                                                    
+                    v-bind="dragOptions"                                
+                    handle=".task-container__drag-handle"                                          
                 >
-                    <template #item="{ element }">
+                <!-- delay="120"      -->
+                    <template #item="{ element, index }">
                         <TaskComp                             
-                            :task="element"           
+                            :task="element"         
+                            :taskIndex="index"  
                             :currentStatusId="props.status.id"                 
                             @task:submitQuickTask="addQuickTask"
                             @task:deleteTask="deleteTaskFromBoard"
@@ -35,7 +37,6 @@ import { useUserStore } from '@/stores/user'
 import type { Task } from '~/types/Task';
 import { useTasks } from '@/composables/useTasks'
 import Draggable from "vuedraggable";
-import type { SortableEvent } from 'sortablejs';
 
 interface Props {
     status: Status    
@@ -52,6 +53,7 @@ const createTask = () => {
         taskDescription: '',
         taskOwner: currentUser.id,
         dueDate: '',
+        ordinal: 0,
         isEditing: true
     }
 
@@ -73,8 +75,16 @@ const deleteTaskFromBoard = (data: Task) => {
 }
 
 const { insertQuickTask } = useTasks()
-const addQuickTask = async (data: Task) => {
-    await insertQuickTask(data, data.projectId)
+const addQuickTask = async (data: any) => {    
+    const { task, placeholderId }: {task: Task, placeholderId: string} = data
+    const newTask = await insertQuickTask(task, task.projectId)        
+
+    if(newTask) {
+        const foundTask = props.status.tasks.find(task => task.id === placeholderId)      
+        if(foundTask) {
+            foundTask.id = newTask.data.id
+        }        
+    }
 }
 </script>
 

@@ -1,6 +1,13 @@
 <template>
-    <div v-if="props.task" class="task-container">          
-        <div class="task-container__inner">
+    <div 
+        v-if="props.task" 
+        class="task-container"
+        :class="{'--is-editing': props.task.isEditing}"
+        @click="openTaskEditor"
+    >                                         
+        <div class="task-container__inner">         
+            <div class="task-container__drag-handle"></div>
+
             <div class="task-container__header flex items-center justify-between gap-3">
                 <p class="mb-0">                    
                     <EditableInput 
@@ -67,12 +74,25 @@ import type { Task } from '~/types/Task'
 const emits = defineEmits(['task:submitQuickTask', 'task:deleteTask'])
 interface Props {
     task: Task
-    currentStatusId: number
+    currentStatusId: number,
+    taskIndex: number
 }
 const props = defineProps<Props>()
 
+const originalTaskIndex = ref(props.taskIndex)
+const originalStatus = ref(props.task.statusId)
 watch(() => props.currentStatusId, (newVal) => {
     props.task.statusId = newVal
+    if(originalStatus.value !== newVal) {
+        props.task.beenMoved = true
+    }    
+}, { immediate: true })
+
+watch(() => props.taskIndex, (newVal) => {
+    props.task.ordinal = newVal
+    if(originalTaskIndex.value !== newVal) {
+        props.task.beenMoved = true
+    }
 }, { immediate: true })
 
 const defaultCalendarValue = ref(new Date())
@@ -90,12 +110,16 @@ const submitQuickTask = () => {
     const clone = (({ isEditing, id, ...o }) => o)(props.task)     
     
     emits('task:submitQuickTask', {
-        taskName: clone.taskName,
-        taskDescription: clone.taskDescription,
-        statusId: clone.statusId,
-        projectId: clone.projectId,
-        taskOwner: clone.taskOwner,
-        dueDate: formatDateForSubmit(clone.dueDate)
+        task: {
+            taskName: clone.taskName,
+            taskDescription: clone.taskDescription,
+            statusId: clone.statusId,
+            projectId: clone.projectId,
+            taskOwner: clone.taskOwner,
+            dueDate: formatDateForSubmit(clone.dueDate),
+            ordinal: clone.ordinal
+        },
+        placeholderId: props.task.id
     })
 
     props.task.isEditing = false
@@ -103,6 +127,10 @@ const submitQuickTask = () => {
 
 const deleteTask = () => {
     emits('task:deleteTask', props.task)
+}
+
+const openTaskEditor = () => {
+    console.log('click click boom')
 }
 </script>
 
@@ -112,6 +140,36 @@ const deleteTask = () => {
     border-radius: 8px;
     padding: 15px;    
     cursor: pointer;    
+    position: relative;    
+    
+    &__actions {
+        position: relative;
+
+        .--is-editing & {
+            z-index: 2;
+        }
+    }
+
+    &__header {
+        position: relative;
+
+        .--is-editing & {
+            p,
+            button {
+                z-index: 2;
+            }
+        }
+    }
+
+    &__drag-handle {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        z-index: 1;
+    }
 
      &.sortable-chosen {        
         transform: rotate(1deg);     

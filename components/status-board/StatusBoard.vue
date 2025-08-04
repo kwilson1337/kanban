@@ -3,7 +3,7 @@
         class="status-board"
         :class="{'--flex' : gridCount > 4}"
     >
-        <div class="status-board__inner">
+        <div class="status-board__inner">            
             <div class="status-board__column-container">
                 <BoardColumn 
                     v-if="props.projectStatuses"
@@ -19,15 +19,38 @@
 <script setup lang="ts">
 import type { Status } from '@/types/Status'
 import BoardColumn from './Board.vue';
+import { useTasks } from '@/composables/useTasks'
 
 interface Props {
-    projectStatuses: Status[] 
+    projectStatuses: Status[],
+    projectId: number
 }
 const props = defineProps<Props>()
 const gridCount = ref(props.projectStatuses.length)
 
-watch(() => props.projectStatuses, () => {
-    console.log('props.projectStatuses', props.projectStatuses)
+
+const { updateTaskStatus } = useTasks()
+const tasksThatHaveBeenMoved = computed(() => {
+    return props.projectStatuses.flatMap(status => status.tasks.filter(task => task.beenMoved))
+})
+watch(() => tasksThatHaveBeenMoved.value, async (newVal) => {
+    if(newVal.length) {
+        console.log(newVal)
+        const submitData = newVal.map(task => ({
+            id: task.id,
+            statusId: task.statusId,
+            ordinal: task.ordinal
+        }))        
+
+        await updateTaskStatus(submitData, props.projectId)
+        
+        newVal.forEach(task => {
+            task.beenMoved = false
+        })
+    }   
+}, { flush: 'post' })
+
+watch(() => props.projectStatuses, () => {        
     gridCount.value = props.projectStatuses.length
 }, { deep: true })
 </script>

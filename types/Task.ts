@@ -7,5 +7,9 @@ export type Task = {
     taskOwner: number | string;
     dueDate: string | Date;
     createdDate: string;
+    ordinal: string | number;
     isEditing?: boolean | string
+    beenMoved?: boolean
 }
+
+export type TaskStatus = Pick<Task, 'id' | 'statusId' | 'ordinal'>;

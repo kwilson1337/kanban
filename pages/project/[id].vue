@@ -15,19 +15,24 @@
                 </div>
 
                 <div class="single-project__board mt-6"> 
-                    <StatusBoard :projectStatuses="singleProject.status" />
+                    <StatusBoard 
+                        :projectStatuses="singleProject.status" 
+                        :project-id="singleProject.id"
+                    />
                 </div>
             </UContainer>
         </div>        
     </div>
 
     <UModal v-model="showStatusModal">
-        <StatusManagement 
-            :projectStatuses="singleProject.status" 
-            :project-id="singleProject.id"
-            @statusManagement:closeModal="showStatusModal = false"
-            @statusManagement:submit="closeAndFetchStatuses"
-        />   
+        <div v-if="singleProject">
+            <StatusManagement 
+                :projectStatuses="singleProject.status" 
+                :project-id="singleProject.id"
+                @statusManagement:closeModal="showStatusModal = false"
+                @statusManagement:submit="closeAndFetchStatuses"
+            />   
+        </div>        
     </UModal>
 </template>
 
