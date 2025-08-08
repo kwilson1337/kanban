@@ -12,10 +12,10 @@
                     itemKey="id"
                     v-bind="dragOptions"                                
                     handle=".task-container__drag-handle"                                          
-                >
-                <!-- delay="120"      -->
+                >                
                     <template #item="{ element, index }">
-                        <TaskComp                             
+                        <TaskComp                   
+                            v-bind="$attrs"
                             :task="element"         
                             :taskIndex="index"  
                             :currentStatusId="props.status.id"                 

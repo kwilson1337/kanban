@@ -11,8 +11,7 @@ export const useTasks = () => {
         return quickTask
     }
 
-     const updateTaskStatus = async (data: TaskStatus[], projectId: string | number) => {
-        console.log('data', data)
+     const updateTaskStatus = async (data: TaskStatus[], projectId: string | number) => {        
         const result = await $fetch(`/api/projects/${projectId}/task/update-tasks-status`, {
             method: 'POST',
             body: data
@@ -21,8 +20,18 @@ export const useTasks = () => {
         console.log('result', result)
     }
 
+    const updateTask = async (task: Task) => {
+        const result = await $fetch(`/api/task/${task.id}`, {
+            method: 'POST',
+            body: task
+        })
+
+        return result
+    }
+
     return {
         insertQuickTask,
-        updateTaskStatus
+        updateTaskStatus,
+        updateTask
     }   
 }

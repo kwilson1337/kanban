@@ -24,6 +24,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
     "@types/sortablejs": "^1.15.8",
     "sass": "^1.83.1"
   }

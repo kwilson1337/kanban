@@ -2,11 +2,10 @@
     <div 
         v-if="props.task" 
         class="task-container"
-        :class="{'--is-editing': props.task.isEditing}"
-        @click="openTaskEditor"
+        :class="{'--is-editing': props.task.isEditing}"        
     >                                         
         <div class="task-container__inner">         
-            <div class="task-container__drag-handle"></div>
+            <div @click="openTaskEditor" class="task-container__drag-handle"></div>
 
             <div class="task-container__header flex items-center justify-between gap-3">
                 <p class="mb-0">                    
@@ -18,7 +17,7 @@
                         color="rose"
                         class="--pointer"
                     />
-                </p>                                
+                </p>                                                
                 <p v-if="!props.task.isEditing" class="mb-0">{{ formatDate(props.task.dueDate) }}</p>                            
                 <UPopover v-else :popper="{ placement: 'bottom-start' }">
                     <UButton 
@@ -71,7 +70,7 @@ import EditableInput from '../inputs/EditableInput.vue'
 import DatePicker from '@/components/date-picker/index.vue'
 import type { Task } from '~/types/Task'
 
-const emits = defineEmits(['task:submitQuickTask', 'task:deleteTask'])
+const emits = defineEmits(['task:submitQuickTask', 'task:deleteTask', 'task:openEditor'])
 interface Props {
     task: Task
     currentStatusId: number,
@@ -107,7 +106,7 @@ watch(() => [props.task.taskName, defaultCalendarValue.value], (newVal) => {
 })
 
 const submitQuickTask = () => {    
-    const clone = (({ isEditing, id, ...o }) => o)(props.task)     
+    const clone = (({ isEditing, id, ...o }) => o)(props.task)
     
     emits('task:submitQuickTask', {
         task: {
@@ -130,7 +129,7 @@ const deleteTask = () => {
 }
 
 const openTaskEditor = () => {
-    console.log('click click boom')
+    emits('task:openEditor', props.task)
 }
 </script>
 

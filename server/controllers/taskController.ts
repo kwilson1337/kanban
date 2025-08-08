@@ -1,4 +1,4 @@
-import { insertQuickTask, updateTaskStatusModel } from "../models/taskModel"
+import { insertQuickTask, updateTaskStatusModel, updateTaskDetailsModel } from "../models/taskModel"
 import { H3Event } from 'h3';
 
 export const createQuickTask = async (event: H3Event) => {
@@ -36,6 +36,25 @@ export const updateTaskStatus = async (event: H3Event) => {
         throw createError({            
             statusCode: 500,
             statusMessage: 'Something went wrong',            
+        })
+    }
+}
+
+export const updateTaskDetails = async (event: H3Event) => {
+    try {
+        const task = await readBody(event)
+        const results = await updateTaskDetailsModel(task)
+
+        if(results.changedRows > 0) {
+            return {
+                statusCode: 200,                
+                statusMessage: 'Task has been updated'
+            }
+        }
+    }catch(error) {
+        throw createError({            
+            statusCode: 500,
+            statusMessage: 'Something went wrong',                    
         })
     }
 }

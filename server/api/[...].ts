@@ -29,5 +29,6 @@ Tasks
 */
 router.post('/projects/:id/task/quick-task', defineEventHandler(taskControler.createQuickTask))
 router.post('/projects/:id/task/update-tasks-status', defineEventHandler(taskControler.updateTaskStatus))
+router.post('/task/:id', defineEventHandler(taskControler.updateTaskDetails))
 
 export default useBase('/api', router.handler)

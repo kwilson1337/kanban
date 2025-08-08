@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import type { Status } from '@/types/Status'
 import EditableList from '~/components/lists/editable/EditableList.vue'
-import { useProjects } from '@/composables/useProjects';
+import { useProjectStatus } from '@/composables/useProjectStatus';
 
 interface Props {
     projectStatuses: Status[],
@@ -39,7 +39,7 @@ const bundleUpdatedListItems = (data: Status[]) => {
     statusListItemSubmitData.value = data    
 }
 
-const { updateProjectStatus } = useProjects()
+const { updateProjectStatus } = useProjectStatus()
 const submitUpdatedStatusList = async () => {    
     if(statusListItemSubmitData) {
         const filteredResults = statusListItemSubmitData.value?.filter(item => item.statusName)        

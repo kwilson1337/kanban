@@ -17,11 +17,11 @@ const attrs = useAttrs()
         background-color: transparent;        
 
         &:disabled {
-            padding: 0px;            
+            padding: 0px;
             color: white;
             font-size: 16px;
             opacity: 1;
-            cursor: auto;            
+            cursor: auto;
         }         
     }    
 
