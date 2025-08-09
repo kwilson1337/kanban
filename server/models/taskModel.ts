@@ -85,3 +85,12 @@ export const updateTaskDetailsModel = async (task: Task) => {
 
     return update
 }
+
+export const deleteTaskModel = async (id: number) => {
+    const result = await sql({
+        query: `DELETE FROM tasks WHERE id = ?`,
+        values: [id]
+    }) as ResultSetHeader
+    
+    return result
+}

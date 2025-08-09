@@ -1,4 +1,5 @@
 
+import { result } from "lodash-es"
 import type { Task, TaskStatus } from "~/types/Task"
 
 export const useTasks = () => {
@@ -12,12 +13,10 @@ export const useTasks = () => {
     }
 
      const updateTaskStatus = async (data: TaskStatus[], projectId: string | number) => {        
-        const result = await $fetch(`/api/projects/${projectId}/task/update-tasks-status`, {
+        await $fetch(`/api/projects/${projectId}/task/update-tasks-status`, {
             method: 'POST',
             body: data
-        })
-
-        console.log('result', result)
+        })        
     }
 
     const updateTask = async (task: Task) => {
@@ -29,9 +28,18 @@ export const useTasks = () => {
         return result
     }
 
+    const deleteTask = async (id: number) => {
+        const result = await $fetch(`/api/task/${id}`, {
+            method: 'DELETE'
+        })
+
+        return result
+    }
+
     return {
         insertQuickTask,
         updateTaskStatus,
-        updateTask
+        updateTask,
+        deleteTask
     }   
 }

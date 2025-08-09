@@ -79,13 +79,22 @@
             >
                 Cancel
             </UButton>
-            <UButton 
-                :disabled="!canSubmitEditTask" 
-                variant="outline"
-                @click="submitCounter++"
-            >
-                Save
-            </UButton>
+            <div class="flex gap-2">
+                <UButton                     
+                    variant="outline"
+                    @click="handleDeleteTask"
+                    color="red"
+                >
+                    Delete
+                </UButton>
+                <UButton 
+                    :disabled="!canSubmitEditTask" 
+                    variant="outline"
+                    @click="submitCounter++"
+                >
+                    Save
+                </UButton>
+            </div>
           </div>
         </template>
       </UCard>
@@ -101,7 +110,7 @@ import StatusManagement from '~/components/forms/StatusManagement.vue';
 import type { Project } from '~/types/Project';
 import type { Task } from '~/types/Task';
 import EditTask from '~/components/forms/EditTask.vue';
-import { formatDateForSubmit } from '@/utils/formate-date'
+import { useTasks } from '@/composables/useTasks';
 
 const router  = useRouter()
 const route = useRoute()
@@ -150,5 +159,17 @@ const handleCloseModal = async (status: number) => {
     }
 
     openTaskEditor.value = false
+}
+
+const { deleteTask } = useTasks()
+const handleDeleteTask = async () => {    
+    if(currentTask.value) {
+        const { statusCode } = await deleteTask(Number(currentTask.value.id))
+
+        if(statusCode === 200) {
+            singleProject.value = await fetchProjectById(Number(route.params.id))
+            openTaskEditor.value = false
+        }        
+    }    
 }
 </script>

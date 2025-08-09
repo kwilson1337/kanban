@@ -1,4 +1,9 @@
-import { insertQuickTask, updateTaskStatusModel, updateTaskDetailsModel } from "../models/taskModel"
+import { 
+    insertQuickTask, 
+    updateTaskStatusModel, 
+    updateTaskDetailsModel,
+    deleteTaskModel
+} from "../models/taskModel"
 import { H3Event } from 'h3';
 
 export const createQuickTask = async (event: H3Event) => {
@@ -50,6 +55,26 @@ export const updateTaskDetails = async (event: H3Event) => {
             }
         }
     }catch(error) {
+        throw createError({            
+            statusCode: 500,
+            statusMessage: 'Something went wrong',                    
+        })
+    }
+}
+
+export const deleteTask = async (event: H3Event) => {
+    try {
+        const taskId = Number(getRouterParam(event, 'id'))
+        const result = await deleteTaskModel(taskId)
+
+        if(result.affectedRows > 0) {
+            return {
+                statusCode: 200,
+                data: result
+            }
+        }
+
+    } catch(error) {
         throw createError({            
             statusCode: 500,
             statusMessage: 'Something went wrong',                    
