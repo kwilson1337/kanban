@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import { useProjects } from '~/composables/useProjects'
+import { useRoute } from 'vue-router'
 
 const emits = defineEmits<{
     (e: 'newProject:newProjectForm'): void
@@ -26,8 +27,9 @@ const emits = defineEmits<{
 const { createProject } = useProjects()
 
 const projectName = ref('')
+const route = useRoute()
 const submitNewProject = async () => {
-    await createProject(projectName.value)
+    await createProject(projectName.value, route.fullPath === '/')
     emits('newProject:newProjectForm')
 }
 </script>

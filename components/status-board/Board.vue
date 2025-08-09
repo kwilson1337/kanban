@@ -45,13 +45,15 @@ const props = defineProps<Props>()
 const { currentUser } = useUserStore()
 
 const createTask = () => {
-    const taskObj = {
+    const user = currentUser?.id ?? 1
+
+    const taskObj: Partial<Task> = {
         id: nanoIdNumbers(),
         statusId: props.status.id,
         projectId: props.status.projectId,
         taskName: '',       
         taskDescription: '',
-        taskOwner: currentUser.id,
+        taskOwner: user,
         dueDate: '',
         ordinal: 0,
         isEditing: true
@@ -97,27 +99,37 @@ const addQuickTask = async (data: any) => {
     flex-shrink: 0;
     min-height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
 
     &.--expand {
         flex-basis: 250px;
+    }
+
+    &__inner {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     &__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: sticky;
+        top: 15px;
     }
 
     &__drop-zone {
-       position: absolute;
-       left: 0px;
-       width: 100%;
-       height: 100%;
-       padding: 0px 10px;       
+        flex-grow: 1;         
+        display: flex;  
+        flex-direction: column;
+        padding: 0px 10px;       
 
        > div {
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
             gap: 15px; 
             height: 100%;
        }       

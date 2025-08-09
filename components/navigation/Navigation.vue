@@ -10,7 +10,7 @@
                 </div>
                 
                 <div class="navigation__right">
-                    <UButton @click="emits('createProject:navigation')">New Project</UButton>
+                    <UButton @click="toggleModal">New Project</UButton>
                 </div>
             </div>
         </UContainer>        
@@ -18,13 +18,12 @@
 </template>
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
-
-const emits = defineEmits<{
-    (e:'createProject:navigation'): void
-}>()
+import { useGlobalNewProjectStore } from '@/stores/globalNewProjectModal'
 
 const userStore = useUserStore()
 const currentUser = computed(() => userStore.currentUser)
+
+const { toggleModal } = useGlobalNewProjectStore()
 </script>
 
 <style lang="scss" scoped>

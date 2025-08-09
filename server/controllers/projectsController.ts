@@ -8,8 +8,8 @@ import { H3Event } from 'h3';
 export const createProject = async (event: H3Event) => {
     try {        
         const body = await readBody(event)               
-        const result = await post(body)         
-           
+        const result = await post(body)
+                   
         return {
           data: result,
           statusCode: 200,

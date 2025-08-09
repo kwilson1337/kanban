@@ -70,10 +70,10 @@ onMounted(async () => {
         fetchStatuses(Number(props.task.projectId)),
         fetchUsers(Number(props.task.taskOwner))
     ])    
-
+    
     const copyOfTask = cloneObject(props.task, ['id', 'ordinal', 'createdDate', 'beenMoved', 'projectId'])    
-    orignalTask.value = {...copyOfTask}
-    formObject.value = copyOfTask             
+    orignalTask.value = {...copyOfTask}    
+    formObject.value = copyOfTask                 
 })
 
 const setIfFormCanSubmit = (canSubmit: boolean) => {    
@@ -141,19 +141,18 @@ const setDayWithOptions = (key: string) => {
     }
 }
 
-const updateData = (data: Date) => {
+const updateData = (date: Date) => {
     if(formObject.value) {
-        formObject.value.dueDate = data
+        formObject.value.dueDate = date
     }    
 }
 
 const { updateTask } = useTasks()
 watch(() => props.submitClick, async (newVal, oldVal) => {
-    if(newVal !== oldVal && formObject.value) {
+    if(newVal !== oldVal && formObject.value) {        
         const result = await updateTask({
             ...props.task,
-            ...formObject.value,
-            dueDate: formatDateForSubmit(formObject.value.dueDate)
+            ...formObject.value            
         })
 
         if(result) {

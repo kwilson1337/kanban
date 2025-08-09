@@ -101,16 +101,16 @@ import StatusManagement from '~/components/forms/StatusManagement.vue';
 import type { Project } from '~/types/Project';
 import type { Task } from '~/types/Task';
 import EditTask from '~/components/forms/EditTask.vue';
+import { formatDateForSubmit } from '@/utils/formate-date'
 
 const router  = useRouter()
 const route = useRoute()
 const { fetchProjectById } = useProjects()
 const { fetchProjectStatuses } = useProjectStatus()
 
-const singleProject = ref<Project>()
+const singleProject = ref<Project | null>()
 onMounted(async () => {        
-    singleProject.value = await fetchProjectById(Number(route.params.id))
-    console.log('mounted ', singleProject.value)
+    singleProject.value = await fetchProjectById(Number(route.params.id))    
 })
 
 const showStatusModal = ref(false)
@@ -123,7 +123,7 @@ const goBack = () => {
 
 const closeAndFetchStatuses = async () => {
     if(singleProject.value) {
-        const fetchedStatuses = await fetchProjectStatuses(singleProject.value.id)           
+        const fetchedStatuses = await fetchProjectStatuses(singleProject.value.id)
 
         singleProject.value.status = fetchedStatuses.data         
         showStatusModal.value = false
@@ -133,7 +133,7 @@ const closeAndFetchStatuses = async () => {
 const openTaskEditor = ref(false)
 const currentTask = ref<Task>()
 const handleOpenTaskEditor = (task: Task) => {    
-    currentTask.value = task
+    currentTask.value = task        
     openTaskEditor.value = true
 }
 
@@ -143,10 +143,10 @@ const handleCanSubmitEditTask = (data: boolean) => {
     canSubmitEditTask.value = data
 }
 
-const handleCloseModal = async (data: number) => {
-    if(data === 200 && singleProject.value) {
-        const fetchedStatuses = await fetchProjectStatuses(singleProject.value.id)        
-        singleProject.value.status = fetchedStatuses.data
+const handleCloseModal = async (status: number) => {
+    if(status === 200 && singleProject.value) {                
+        singleProject.value = null
+        singleProject.value = await fetchProjectById(Number(route.params.id))
     }
 
     openTaskEditor.value = false

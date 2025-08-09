@@ -5,9 +5,7 @@ export const createQuickTask = async (event: H3Event) => {
     try {        
         const task = await readBody(event)
         const result = await insertQuickTask(task)
-
-        console.log('result', result)
-
+        
         return {
             data: result?.length ? result[0] : result,
             statusCode: 200

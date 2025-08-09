@@ -32,11 +32,14 @@ const gridCount = ref(props.projectStatuses.length)
 
 const { updateTaskStatus } = useTasks()
 const tasksThatHaveBeenMoved = computed(() => {
-    return props.projectStatuses.flatMap(status => status.tasks.filter(task => task.beenMoved))
+    if(props.projectStatuses.length > 0) {
+        return props.projectStatuses.flatMap(status => status.tasks.filter(task => task.beenMoved))
+    }   
+    
+    return []
 })
 watch(() => tasksThatHaveBeenMoved.value, async (newVal) => {
-    if(newVal.length) {
-        console.log(newVal)
+    if(newVal.length) {        
         const submitData = newVal.map(task => ({
             id: task.id,
             statusId: task.statusId,
@@ -51,9 +54,9 @@ watch(() => tasksThatHaveBeenMoved.value, async (newVal) => {
     }   
 }, { flush: 'post' })
 
-watch(() => props.projectStatuses, () => {        
+watch(() => props.projectStatuses, (newVal) => {    
     gridCount.value = props.projectStatuses.length
-}, { deep: true })
+}, { deep: true, immediate: true })
 </script>
 
 <style lang="scss" scoped>

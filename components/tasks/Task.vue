@@ -32,7 +32,7 @@
                 </UPopover>
             </div>
 
-            <div v-if="props.task.taskDescription" class="task-container__desc mt-3">
+            <div v-if="props.task.taskDescription" class="task-container__desc">
                 {{ props.task.taskDescription }}
             </div>
 
@@ -73,7 +73,7 @@ import type { Task } from '~/types/Task'
 const emits = defineEmits(['task:submitQuickTask', 'task:deleteTask', 'task:openEditor'])
 interface Props {
     task: Task
-    currentStatusId: number,
+    currentStatusId: number | string,
     taskIndex: number
 }
 const props = defineProps<Props>()

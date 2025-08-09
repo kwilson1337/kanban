@@ -2,6 +2,7 @@ import { sql } from '~~/server/db';
 import { ResultSetHeader } from '@/types/ResultSetHeader'
 import type { Task, TaskStatus } from '~/types/Task'
 import { cloneObject } from '~/utils/clone-object';
+import { formatDateForSubmit } from '~/utils/formate-date';
 
 export const fetchTasks = async (projectId: string | number) => {
     const tasks = await sql({
@@ -63,7 +64,7 @@ export const updateTaskStatusModel = async (tasks: TaskStatus[], projectId: stri
     return updates
 }
 
-export const updateTaskDetailsModel = async (task: Task) => {
+export const updateTaskDetailsModel = async (task: Task) => {    
     const clonedObj: Partial<Task>  = cloneObject(task, ['id', 'ordinal', 'createdDate'])    
      
     const update = await sql({

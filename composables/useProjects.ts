@@ -1,10 +1,11 @@
 import { userId } from "~/constants/user"
 import { ref } from 'vue'
 import type { Project } from "~/types/Project"
-import type { Status } from "~/types/Status"
+import { useRouter } from "vue-router"
 
 export const useProjects = () => {
     const isLoadingProjects = ref(true)
+    const router = useRouter()
 
     const allProjects = ref<Project[] | []>([])
     const fetchProjects = async () => {
@@ -17,16 +18,20 @@ export const useProjects = () => {
     }
 
     const createProject = async (name: string, hasRefresh = true) => {
-        await $fetch('/api/projects', {
+        const { data } = await $fetch('/api/projects', {
             method: 'POST',
             body: {
                 projectName: name,
                 userId
             }      
         }) 
-
+     
         if(hasRefresh) {
             await fetchProjects()
+        } else {            
+            router.push({
+                path: `/project/${data.id}`
+            })
         }
     }
     
