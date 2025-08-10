@@ -15,8 +15,9 @@
                         :disabled="!props.task.isEditing" 
                         :variant="props.task.isEditing ? 'outline' : 'none'"      
                         color="rose"
-                        class="--pointer"
-                    />
+                        class="--pointer"                        
+                        @keydown.enter.stop="handleEnterSubmit"
+                    />                    
                 </p>                                                
                 <p v-if="!props.task.isEditing" class="mb-0">{{ formatDate(props.task.dueDate) }}</p>                            
                 <UPopover v-else :popper="{ placement: 'bottom-start' }">
@@ -122,6 +123,12 @@ const submitQuickTask = () => {
     })
 
     props.task.isEditing = false
+}
+
+const handleEnterSubmit = () => {    
+    if(canSubmit.value) {
+        submitQuickTask()
+    }
 }
 
 const deleteTask = () => {

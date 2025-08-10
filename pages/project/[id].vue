@@ -2,15 +2,13 @@
     <div class="single-project">
         <div class="single-project__inner">
             <UContainer v-if="singleProject">                
-                <div class="single-project__name flex items-center">
-                    <button @click="goBack" class="flex items-center justify-center">
-                        <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 mr-3" />
-                    </button>
-                    <p class="mb-0 w-full">
-                        <span class="mr-2">{{ singleProject.projectName }}:</span>
-                        <UBadge :label="formatDate(singleProject.createdDate)" />
-                    </p>     
-                    
+                <div class="single-project__name flex items-center justify-between">
+                    <div class="flex items-center">
+                        <button @click="goBack" class="flex items-center justify-center">
+                            <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 mr-3" />
+                        </button>                       
+                        <QuickEditProject class="w-full" :project-data="singleProject" />    
+                    </div>                
                     <UButton @click="showStatusModal = true">Update Project Statuses</UButton>
                 </div>
 
@@ -111,6 +109,7 @@ import type { Project } from '~/types/Project';
 import type { Task } from '~/types/Task';
 import EditTask from '~/components/forms/EditTask.vue';
 import { useTasks } from '@/composables/useTasks';
+import QuickEditProject from '~/components/projects/QuickEditProject.vue';
 
 const router  = useRouter()
 const route = useRoute()

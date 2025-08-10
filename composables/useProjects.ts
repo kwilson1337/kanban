@@ -39,12 +39,22 @@ export const useProjects = () => {
         const result = await $fetch(`/api/projects/${id}`)
         return result.data
     }
+
+    const updateProjectName = async (projectName: Partial<Project>, projectId: number) => {
+        const result = await $fetch(`/api/projects/${projectId}`, {
+            method: 'POST',
+            body: projectName
+        })
+
+        return result
+    }
        
     return {
         fetchProjects,
         createProject,
         allProjects,
         isLoadingProjects,
-        fetchProjectById    
+        fetchProjectById,
+        updateProjectName   
     }
 }

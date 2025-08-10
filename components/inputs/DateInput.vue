@@ -27,7 +27,7 @@ const props = defineProps({
     date: {
         type: [String || Date],
         default: ''
-    }
+    }   
 })
 
 const dateCopy = ref(props.date)

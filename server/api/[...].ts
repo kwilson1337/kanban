@@ -12,6 +12,7 @@ Projects
 router.post('/projects', defineEventHandler(projectController.createProject))
 router.get('/projects/:id', defineEventHandler(projectController.fetchProjectById))
 router.get('/projects/user/:id', defineEventHandler(projectController.fetchUserProjects))
+router.post('/projects/:id', defineEventHandler(projectController.updateProjectName))
 
 /**
 Users

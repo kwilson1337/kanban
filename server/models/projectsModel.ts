@@ -3,6 +3,7 @@ import type { Project } from '~/types/Project';
 import type { Status } from '~/types/Status';
 import { ResultSetHeader } from '@/types/ResultSetHeader'
 import { createBaseStatuses, fetchStatusByProjectId } from '~/server/models/statusModel'
+import { cloneObject } from '@/utils/clone-object';
 
 export const fetchAllPerUser = async (id: number) => {
     const result = await sql({
@@ -50,4 +51,20 @@ export const post = async (data: any) => {
     }    
 
     return []
+}
+
+export const updateProjectModel = async (project: Project, projectId: number) => {
+    const clonedProj = cloneObject(project, ['id', 'createdDate'])
+    console.log()
+
+    const result = await sql({
+        query: `UPDATE projects
+                SET 
+                    projectName = ?,
+                    userId = ?
+                WHERE id = ?`,
+        values: [...Object.values(clonedProj), projectId]        
+    }) as ResultSetHeader
+    
+    return result
 }

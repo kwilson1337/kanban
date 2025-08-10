@@ -22,6 +22,7 @@ const attrs = useAttrs()
             font-size: 16px;
             opacity: 1;
             cursor: auto;
+            box-shadow: none;
         }         
     }    
 
