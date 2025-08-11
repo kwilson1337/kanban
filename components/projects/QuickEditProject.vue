@@ -1,7 +1,7 @@
 <template>
     <div class="quick-edit-project">        
         <div class="quick-edit-project__inner flex items-center gap-3">            
-            <p class="mb-0 w-full flex items-center gap-2">                
+            <p class="mb-0 w-full flex items-center gap-2 relative">                
                 <span 
                     v-if="!isEditing" 
                     class="dbl-click-overlay" 
@@ -106,21 +106,7 @@ const handleEnterSubmit = async () => {
             visibility: hidden;
             transition: .2s ease-in-out all;
         }
-
-        p {
-            position: relative;
-
-            .dbl-click-overlay {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
-                z-index: 2;
-                cursor: pointer;
-            }            
-        }
-
+       
         &:hover {
             button {
                 opacity: 1;

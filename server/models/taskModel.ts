@@ -65,7 +65,11 @@ export const updateTaskStatusModel = async (tasks: TaskStatus[], projectId: stri
 }
 
 export const updateTaskDetailsModel = async (task: Task) => {    
-    const clonedObj: Partial<Task>  = cloneObject(task, ['id', 'ordinal', 'createdDate'])    
+    const clonedObj: Partial<Task>  = cloneObject(task, ['id', 'ordinal', 'createdDate']) 
+    const dateString = clonedObj.dueDate?.toString()
+    if(dateString && dateString.includes('T')){
+        clonedObj.dueDate = formatDateForSubmit(task.dueDate)
+    }
      
     const update = await sql({
         query: `UPDATE tasks

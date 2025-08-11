@@ -54,8 +54,7 @@ export const post = async (data: any) => {
 }
 
 export const updateProjectModel = async (project: Project, projectId: number) => {
-    const clonedProj = cloneObject(project, ['id', 'createdDate'])
-    console.log()
+    const clonedProj = cloneObject(project, ['id', 'createdDate'])    
 
     const result = await sql({
         query: `UPDATE projects

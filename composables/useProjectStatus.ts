@@ -23,8 +23,20 @@ export const useProjectStatus = () => {
         })
     }
 
+    const updateStatus = async (status: Status) => {
+        const result = await $fetch(`/api/status/${status.id}`, {
+            method: 'PATCH',
+            body: status
+        })
+
+        if(result) {
+            return result
+        }
+    }
+
     return {
         updateProjectStatus,
-        fetchProjectStatuses 
+        fetchProjectStatuses,
+        updateStatus
     }
 }

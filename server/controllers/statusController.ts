@@ -1,7 +1,8 @@
 import { 
     createBaseStatuses, 
     updateAndAdddNewProjectStatuses,
-    fetchStatusByProjectId
+    fetchStatusByProjectId,
+    updateStatusModel
  } from '~/server/models/statusModel'
 import { H3Event } from 'h3';
 
@@ -43,6 +44,25 @@ export const updateProjectStatuses = async (event: H3Event) => {
         throw createError({            
             statusCode: 500,
             statusMessage: 'Something went wrong'
+        })
+    }
+}
+
+export const updateStatus = async (event: H3Event) => {
+    try {
+        const status = await readBody(event)
+        const result = await updateStatusModel(status)
+
+        if(result.affectedRows > 0) {
+            return {
+                data: result,
+                statusCode: 200,
+            }
+        }        
+    } catch(error) {        
+        throw createError({            
+            statusCode: 500,
+            statusMessage: 'Something went wrong'                        
         })
     }
 }

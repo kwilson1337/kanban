@@ -3,6 +3,7 @@ import { ResultSetHeader } from '@/types/ResultSetHeader'
 import { Status } from '~/types/Status';
 import { fetchTasks } from './taskModel';
 import { Task } from '~/types/Task';
+import { cloneObject } from '~/utils/clone-object';
 
 export const createBaseStatuses = async (projectId: number) => {
     const displayNamesAndOrdinal = [
@@ -113,4 +114,24 @@ export const updateAndAdddNewProjectStatuses = async (
     }
 
     return results
+}
+
+export const updateStatusModel = async (status: Status) => {
+    const formatStatus: Partial<Status> = cloneObject(status, ['id', 'createdDate', 'projectId', 'tasks'])    
+    const update = await sql({
+        query: `UPDATE status
+                SET
+                    statusName = ?,
+                    ordinal = ?
+                WHERE projectId = ?
+                AND id = ?`,
+        values: [
+            formatStatus.statusName, 
+            formatStatus.ordinal, 
+            Number(status.projectId),
+            Number(status.id)
+        ]
+    }) as ResultSetHeader
+
+    return update
 }

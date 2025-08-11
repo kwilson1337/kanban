@@ -24,6 +24,7 @@ Project Status
 */
 router.post('/projects/:id/status/update', defineEventHandler(projectStatusController.updateProjectStatuses))
 router.get('/projects/:id/status', defineEventHandler(projectStatusController.fetchStatusForProject))
+router.patch('/status/:id', defineEventHandler(projectStatusController.updateStatus))
 
 /**
 Tasks

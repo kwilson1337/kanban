@@ -1,8 +1,20 @@
 <template>
     <div class="single-status-board">        
         <div class="single-status-board__inner">                        
-            <div class="single-status-board__header">
-                <p class="mb-0">{{ props.status.statusName }}</p>
+            <div class="single-status-board__header">                
+                <div class="relative">
+                    <span 
+                        v-if="!isEditingStatusName"
+                        @dblclick="toggleIsEditing" 
+                        class="dbl-click-overlay"
+                    ></span>                    
+                    <EditableInput 
+                        class="mb-0" 
+                        v-model="localStatusName" 
+                        :disabled="!isEditingStatusName"   
+                        @keydown.enter.stop="handleUpdateStatusName"                     
+                    />
+                </div>
                 <UButton icon="i-heroicons-plus" @click="createTask" />
             </div>
             
@@ -37,6 +49,8 @@ import { useUserStore } from '@/stores/user'
 import type { Task } from '~/types/Task';
 import { useTasks } from '@/composables/useTasks'
 import Draggable from "vuedraggable";
+import EditableInput from '../inputs/EditableInput.vue';
+import { useProjectStatus } from '@/composables/useProjectStatus';
 
 interface Props {
     status: Status    
@@ -44,7 +58,7 @@ interface Props {
 const props = defineProps<Props>()
 const { currentUser } = useUserStore()
 
-const createTask = () => {
+const createTask = async (event: MouseEvent) => {
     const user = currentUser?.id ?? 1
 
     const taskObj: Partial<Task> = {
@@ -60,6 +74,15 @@ const createTask = () => {
     }
 
     props.status.tasks.unshift(taskObj)
+
+    const button = event.target as Element
+    const dropZone = button?.parentNode?.parentNode?.parentNode?.querySelector('.single-status-board__drop-zone')
+    await nextTick()
+    const foundInput = dropZone?.querySelector('.task-container.--is-editing input')
+    if(foundInput) {
+        (foundInput as HTMLElement).focus()
+    }
+    
 }
 
 const dragOptions = computed(() => {
@@ -86,6 +109,33 @@ const addQuickTask = async (data: any) => {
         if(foundTask) {
             foundTask.id = newTask.data.id
         }        
+    }
+}
+
+const isEditingStatusName = ref(false)
+const localStatusName = ref(props.status.statusName)
+const { updateStatus } = useProjectStatus()
+const handleUpdateStatusName = async () => {
+    if(localStatusName.value !== props.status.statusName) {
+        const submitObj: Status = {
+            ...props.status,
+            statusName: localStatusName.value
+        } 
+        
+        await updateStatus(submitObj)
+    }   
+    
+    isEditingStatusName.value = false
+}
+
+const toggleIsEditing = async (event: MouseEvent) => {
+    isEditingStatusName.value = !isEditingStatusName.value
+    const span = event?.target as Element
+    const input = span.parentNode?.querySelector('input')
+
+    if(input) {     
+        await nextTick()   
+        input.focus()
     }
 }
 </script>
