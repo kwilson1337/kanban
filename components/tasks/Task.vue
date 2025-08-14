@@ -8,9 +8,8 @@
             <div @click="openTaskEditor" class="task-container__drag-handle"></div>
 
             <div class="task-container__header flex items-center justify-between gap-3">
-                <p class="mb-0">                    
-                    <EditableInput 
-                        ref="taskTitle"
+                <p ref="taskTitle" class="mb-0">                    
+                    <EditableInput                         
                         v-model="props.task.taskName" 
                         :disabled="!props.task.isEditing" 
                         :variant="props.task.isEditing ? 'outline' : 'none'"      
@@ -106,6 +105,14 @@ watch(() => [props.task.taskName, defaultCalendarValue.value], (newVal) => {
     }
 })
 
+const taskTitle = ref<HTMLDivElement | null>(null)
+watch(() => props.task.isEditing, async (newVal) => {    
+    await nextTick()
+    if(newVal && taskTitle.value) {
+        taskTitle.value.querySelector('input')?.focus()
+    }    
+}, {deep: true, immediate: true})
+
 const submitQuickTask = () => {    
     const clone = (({ isEditing, id, ...o }) => o)(props.task)
     
@@ -159,6 +166,10 @@ const openTaskEditor = () => {
     &__header {
         position: relative;
 
+        &:deep(input) {
+            font-weight: 600;
+        }
+
         .--is-editing & {
             p,
             button {
@@ -184,6 +195,10 @@ const openTaskEditor = () => {
             opacity: .5;  
         }
     }  
+
+    &__desc {
+        font-size: 14px;
+    }
 
     &__actions {
         display: grid;

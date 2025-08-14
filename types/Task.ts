@@ -1,3 +1,5 @@
+import type { Category } from "./Category"
+
 export type Task = {
     id: number | string
     statusId: number | string
@@ -10,6 +12,8 @@ export type Task = {
     ordinal: string | number
     isEditing?: boolean | string
     beenMoved?: boolean
+    categories: Category[]
+    selectedCategories: Category[]
 }
 
 export type TaskStatus = Pick<Task, 'id' | 'statusId' | 'ordinal'>

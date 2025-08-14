@@ -3,6 +3,7 @@ import * as projectController from '~/server/controllers/projectsController'
 import * as userController from '~/server/controllers/usersController'
 import * as projectStatusController from '~/server/controllers/statusController'
 import * as taskControler from '~/server/controllers/taskController'
+import * as categoryController from '@/server/controllers/categoryController'
 
 const router = createRouter();
 
@@ -33,5 +34,10 @@ router.post('/projects/:id/task/quick-task', defineEventHandler(taskControler.cr
 router.post('/projects/:id/task/update-tasks-status', defineEventHandler(taskControler.updateTaskStatus))
 router.post('/task/:id', defineEventHandler(taskControler.updateTaskDetails))
 router.delete('/task/:id', defineEventHandler(taskControler.deleteTask))
+
+/**
+Categories
+*/
+router.get('/task/:id/categories', defineEventHandler(categoryController.fetchTaskCategories))
 
 export default useBase('/api', router.handler)

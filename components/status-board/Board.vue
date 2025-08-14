@@ -128,15 +128,8 @@ const handleUpdateStatusName = async () => {
     isEditingStatusName.value = false
 }
 
-const toggleIsEditing = async (event: MouseEvent) => {
-    isEditingStatusName.value = !isEditingStatusName.value
-    const span = event?.target as Element
-    const input = span.parentNode?.querySelector('input')
-
-    if(input) {     
-        await nextTick()   
-        input.focus()
-    }
+const toggleIsEditing = async () => {
+    isEditingStatusName.value = !isEditingStatusName.value  
 }
 </script>
 
